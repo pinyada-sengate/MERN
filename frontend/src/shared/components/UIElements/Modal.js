@@ -14,20 +14,20 @@ const ModalOverlay = (props) => {
       </header>
       <form
         onSubmit={
-          props.onSubmit ? props.onSubmit : (event) => event.preventDefault
+          props.onSubmit ? props.onSubmit : (event) => event.preventDefault()
         }
       >
         <div className={`modal__content ${props.contentClass}`}>
           {props.children}
         </div>
         <footer className={`modal__footer ${props.footerClass}`}>
-          props.footer
+          {props.footer}
         </footer>
       </form>
     </div>
   );
 
-  return ReactDOM.createPotal(content, document.getElementById("modal-hook"));
+  return ReactDOM.createPortal(content, document.getElementById("modal-hook"));
 };
 
 const Modal = (props) => {
