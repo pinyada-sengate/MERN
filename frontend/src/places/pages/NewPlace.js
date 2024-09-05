@@ -17,13 +17,9 @@ const formReducer = (state, action) => {
         if (inputId === action.inputId) {
           formIsValid = formIsValid && action.isValid;
         } else {
-          console.log(state.inputs[inputId]);
-
           formIsValid = formIsValid && state.inputs[inputId].isValid;
         }
       }
-
-      console.log(formIsValid);
       return {
         ...state,
         inputs: {
@@ -51,8 +47,8 @@ const NewPlace = () => {
         value: "",
         isValid: false,
       },
-      isValid: false,
     },
+    isValid: false,
   });
 
   const inputHandler = useCallback((id, value, isValid) => {
@@ -72,16 +68,15 @@ const NewPlace = () => {
         type="text"
         label="Title"
         validators={[VALIDATOR_REQUIRE()]}
-        errorText="Please enter valid title"
+        errorText="Please enter a valid title."
         onInput={inputHandler}
       />
-
       <Input
         id="description"
         element="textarea"
         label="Description"
         validators={[VALIDATOR_MINLENGTH(5)]}
-        errorText="Please enter valid description (at least 5 characters)"
+        errorText="Please enter a valid description (at least 5 characters)."
         onInput={inputHandler}
       />
       <Button type="submit" disabled={!formState.isValid}>
