@@ -44,7 +44,7 @@ const DUMMY_PLACES = [
 ];
 
 const UpdatePlace = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const placeId = useParams().placeId;
 
   const [formState, inputHandler, setFormData] = useForm(
@@ -64,7 +64,6 @@ const UpdatePlace = () => {
   const identifiedPlace = DUMMY_PLACES.find((p) => p.id === placeId);
 
   useEffect(() => {
-    console.log(identifiedPlace);
     setFormData(
       {
         title: {
@@ -78,21 +77,18 @@ const UpdatePlace = () => {
       },
       true
     );
-
     setIsLoading(false);
   }, [setFormData, identifiedPlace]);
 
   const placeUpdateSubmitHandler = (event) => {
     event.preventDefault();
-
-    //TODO: updare to database later
     console.log(formState.inputs);
   };
 
   if (!identifiedPlace) {
     return (
       <div className="center">
-        <h2>Clould not find a place</h2>
+        <h2>Could not find place!</h2>
       </div>
     );
   }
@@ -113,7 +109,7 @@ const UpdatePlace = () => {
         type="text"
         label="Title"
         validators={[VALIDATOR_REQUIRE()]}
-        errorText="Please enter a valid title"
+        errorText="Please enter a valid title."
         onInput={inputHandler}
         initialValue={formState.inputs.title.value}
         initialValid={formState.inputs.title.isValid}
@@ -123,7 +119,7 @@ const UpdatePlace = () => {
         element="textarea"
         label="Description"
         validators={[VALIDATOR_MINLENGTH(5)]}
-        errorText="Please enter a valid description (at least 5 characters)."
+        errorText="Please enter a valid description (min. 5 characters)."
         onInput={inputHandler}
         initialValue={formState.inputs.description.value}
         initialValid={formState.inputs.description.isValid}
