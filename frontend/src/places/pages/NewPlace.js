@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./NewPlace.css";
+import "./PlaceForm.css";
 
 import Input from "../../shared/components/FormElements/Input";
 import {
