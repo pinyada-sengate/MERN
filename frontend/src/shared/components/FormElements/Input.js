@@ -29,8 +29,6 @@ const Input = (props) => {
     isValid: props.initialValid || false,
   });
 
-  console.log(props);
-
   const { id, onInput } = props;
   const { value, isValid } = inputState;
 
