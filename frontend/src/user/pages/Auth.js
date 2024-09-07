@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import "./Auth.css";
 
@@ -11,8 +11,11 @@ import {
 import Button from "../../shared/components/FormElements/Button";
 import { useForm } from "../../shared/hooks/form-hook";
 import Card from "../../shared/components/UIElements/Card";
+import { AuthContext } from "../../shared/context/auth-context";
 
 const Auth = () => {
+  const auth = useContext(AuthContext);
+
   const initialInputs = {
     email: {
       value: "",
@@ -26,11 +29,12 @@ const Auth = () => {
   const [formState, inputHandler, setFormData] = useForm(initialInputs, false);
   const [isLoginMode, setIsLoginMode] = useState(true);
 
-  const loginSubmitHandler = (event) => {
+  const authSubmitHandler = (event) => {
     event.preventDefault();
 
     //TODO: send data to server
     console.log(formState.inputs);
+    auth.login();
   };
 
   const switchModeHandler = () => {
@@ -62,7 +66,7 @@ const Auth = () => {
     <Card className="authentication">
       <h2>Login Required</h2>
       <hr />
-      <form className="place-form" onSubmit={loginSubmitHandler}>
+      <form className="place-form" onSubmit={authSubmitHandler}>
         {!isLoginMode && (
           <Input
             id="name"
