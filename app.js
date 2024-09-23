@@ -1,9 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
 const HttpError = require("./models/http-error");
+
+const keys = require("./config/keys");
 
 const app = express();
 
@@ -28,4 +31,11 @@ app.use((error, req, res, next) => {
   });
 });
 
-app.listen(5000);
+mongoose
+  .connect(keys.mongoURI)
+  .then(() => {
+    app.listen(5000);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
