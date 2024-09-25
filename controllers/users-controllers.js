@@ -68,7 +68,38 @@ const signup = async (req, res, next) => {
   res.status(201).json({ user: createdUser.toObject({ getters: true }) });
 };
 
-const login = (req, res, next) => {};
+const login = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty) {
+    return next(
+      new HttpError("Invalid inputs passed, please check your data", 422)
+    );
+  }
+
+  const { email, password } = req.params;
+  let existingUser;
+
+  try {
+    existingUser = await User.findOne({ email });
+  } catch (err) {
+    const error = new HttpError(
+      "Logging in failed, please try again later",
+      500
+    );
+    return next(error);
+  }
+
+  //TODO: hash password
+  if (!existingUser || existingUser.password !== password) {
+    const error = new HttpError(
+      "Invalid credentials, could not log you in.",
+      401
+    );
+    return next(error);
+  }
+
+  res.json({ message: "Logged in" });
+};
 
 exports.getUsers = getUsers;
 exports.signup = signup;
