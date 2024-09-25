@@ -29,7 +29,7 @@ const signup = async (req, res, next) => {
     );
   }
 
-  const { name, email, password, places } = req.body;
+  const { name, email, password } = req.body;
 
   let existingUser;
 
@@ -57,7 +57,7 @@ const signup = async (req, res, next) => {
     image:
       "https://lh5.googleusercontent.com/p/AF1QipPvcLglf3S0-gNAZEVATnRTaObdbR4fcclktCO0=w408-h306-k-no",
     password, //TODO: will be hash password later
-    places,
+    places: [],
   });
 
   try {
