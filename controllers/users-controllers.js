@@ -78,7 +78,7 @@ const login = async (req, res, next) => {
     );
   }
 
-  const { email, password } = req.params;
+  const { email, password } = req.body;
   let existingUser;
 
   try {
