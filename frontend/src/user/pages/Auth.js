@@ -102,7 +102,6 @@ const Auth = () => {
 
   return (
     <React.Fragment>
-      {console.log(error)}
       <ErrorModal error={error} onClear={clearError} />
       <Card className="authentication">
         {isLoading && <LoadingSpinner asOverlay />}
