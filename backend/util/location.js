@@ -1,6 +1,7 @@
 const axios = require("axios");
 
 const keys = require("../config/keys");
+const HttpError = require("../models/http-error");
 
 async function getCoordsForAddress(address) {
   const response = await axios.get(
