@@ -1,43 +1,73 @@
 import React, { useState, useContext } from "react";
 
-import "./Auth.css";
-
+import Card from "../../shared/components/UIElements/Card";
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
-import Card from "../../shared/components/UIElements/Card";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
-
+import ImageUpload from "../../shared/components/FormElements/ImageUpload";
 import {
-  VALIDATOR_MINLENGTH,
   VALIDATOR_EMAIL,
+  VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
-
 import { useForm } from "../../shared/hooks/form-hook";
 import { useHttpClient } from "../../shared/hooks/http-hook";
-
 import { AuthContext } from "../../shared/context/auth-context";
+import "./Auth.css";
 
 const Auth = () => {
   const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
-  const initialInputs = {
-    email: {
-      value: "",
-      isValid: false,
+  const [formState, inputHandler, setFormData] = useForm(
+    {
+      email: {
+        value: "",
+        isValid: false,
+      },
+      password: {
+        value: "",
+        isValid: false,
+      },
     },
-    password: {
-      value: "",
-      isValid: false,
-    },
+    false
+  );
+
+  const switchModeHandler = () => {
+    if (!isLoginMode) {
+      setFormData(
+        {
+          ...formState.inputs,
+          name: undefined,
+          image: undefined,
+        },
+        formState.inputs.email.isValid && formState.inputs.password.isValid
+      );
+    } else {
+      setFormData(
+        {
+          ...formState.inputs,
+          name: {
+            value: "",
+            isValid: false,
+          },
+          image: {
+            value: null,
+            isValid: false,
+          },
+        },
+        false
+      );
+    }
+    setIsLoginMode((prevMode) => !prevMode);
   };
-  const [formState, inputHandler, setFormData] = useForm(initialInputs, false);
 
   const authSubmitHandler = async (event) => {
     event.preventDefault();
+
+    console.log(formState.inputs);
 
     if (isLoginMode) {
       try {
@@ -52,7 +82,6 @@ const Auth = () => {
             "Content-Type": "application/json",
           }
         );
-
         auth.login(responseData.user.id);
       } catch (err) {}
     } else {
@@ -75,31 +104,6 @@ const Auth = () => {
     }
   };
 
-  const switchModeHandler = () => {
-    if (!isLoginMode) {
-      // handle when switch to login mode
-      const inputData = {
-        ...formState.inputs,
-        name: undefined,
-      };
-      const formValidity =
-        formState.inputs.email.isValid && formState.inputs.password.isValid;
-      setFormData(inputData, formValidity);
-    } else {
-      // handle when switch to register mode
-      const inputData = {
-        ...formState.inputs,
-        name: {
-          value: "",
-          isValid: false,
-        },
-      };
-      setFormData(inputData, false);
-    }
-
-    setIsLoginMode((prevMode) => !prevMode);
-  };
-
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
@@ -107,34 +111,37 @@ const Auth = () => {
         {isLoading && <LoadingSpinner asOverlay />}
         <h2>Login Required</h2>
         <hr />
-        <form className="place-form" onSubmit={authSubmitHandler}>
+        <form onSubmit={authSubmitHandler}>
           {!isLoginMode && (
             <Input
-              id="name"
               element="input"
+              id="name"
               type="text"
               label="Your Name"
               validators={[VALIDATOR_REQUIRE()]}
-              errorText="Please enter your name."
+              errorText="Please enter a name."
               onInput={inputHandler}
             />
           )}
+          {!isLoginMode && (
+            <ImageUpload center id="image" onInput={inputHandler} />
+          )}
           <Input
-            id="email"
             element="input"
-            type="text"
-            label="Email"
+            id="email"
+            type="email"
+            label="E-Mail"
             validators={[VALIDATOR_EMAIL()]}
-            errorText="Please enter a valid email."
+            errorText="Please enter a valid email address."
             onInput={inputHandler}
           />
           <Input
-            id="password"
             element="input"
-            type="text"
+            id="password"
+            type="password"
             label="Password"
             validators={[VALIDATOR_MINLENGTH(6)]}
-            errorText="Please enter a valid password (at least 6 characters)."
+            errorText="Please enter a valid password, at least 6 characters."
             onInput={inputHandler}
           />
           <Button type="submit" disabled={!formState.isValid}>
