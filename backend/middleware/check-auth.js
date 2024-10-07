@@ -4,6 +4,10 @@ const HttpError = require("../models/http-error");
 const keys = require("../config/keys");
 
 module.exports = (req, res, next) => {
+  if (req.method === "OPTIONS") {
+    return next();
+  }
+
   try {
     // Authorization: "Barer token"
     const token = req.headers.authorization.split(" ")[1];
