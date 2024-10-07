@@ -84,7 +84,7 @@ const signup = async (req, res, next) => {
         userId: createdUser.id,
         email: createdUser.email,
       },
-      "supersecret_dont_share", // TODO: store private key in somewhere else more save
+      keys.tokenPrivateKey,
       { expiresIn: "1h" }
     );
   } catch (err) {
