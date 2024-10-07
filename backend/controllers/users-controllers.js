@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 
 const HttpError = require("../models/http-error");
 const User = require("../models/user");
+const keys = require("../config/keys");
 
 const getUsers = async (req, res, next) => {
   let users;
@@ -151,7 +152,7 @@ const login = async (req, res, next) => {
         userId: existingUser.id,
         email: existingUser.email,
       },
-      "supersecret_dont_share", // TODO: store private key in somewhere else more save
+      keys.tokenPrivateKey,
       { expiresIn: "1h" }
     );
   } catch (err) {
