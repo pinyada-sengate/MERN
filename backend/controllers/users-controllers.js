@@ -1,11 +1,9 @@
-const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const HttpError = require("../models/http-error");
 const User = require("../models/user");
-const keys = require("../config/keys");
 
 const getUsers = async (req, res, next) => {
   let users;
@@ -84,7 +82,7 @@ const signup = async (req, res, next) => {
         userId: createdUser.id,
         email: createdUser.email,
       },
-      keys.tokenPrivateKey,
+      process.env.JWT_KEY,
       { expiresIn: "1h" }
     );
   } catch (err) {
@@ -152,7 +150,7 @@ const login = async (req, res, next) => {
         userId: existingUser.id,
         email: existingUser.email,
       },
-      keys.tokenPrivateKey,
+      process.env.JWT_KEY,
       { expiresIn: "1h" }
     );
   } catch (err) {
