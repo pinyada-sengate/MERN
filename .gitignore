@@ -41,4 +41,4 @@ packages/react-devtools-timeline/dist
 dev.js
 backend/uploads/images
 nodemon.json
-.env
+frontend/.env
